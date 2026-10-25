@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChevronDown, ChevronUp } from '@lucide/vue'
+import { ChevronDown, ChevronUp } from "@lucide/vue";
 import {
   SelectContent,
   type SelectContentEmits,
@@ -9,16 +9,16 @@ import {
   SelectScrollUpButton,
   SelectViewport,
   useForwardPropsEmits,
-} from 'reka-ui'
-import type { HTMLAttributes } from 'vue'
+} from "reka-ui";
+import type { HTMLAttributes } from "vue";
 
 const {
   class: className,
-  position = 'popper',
+  position = "popper",
   ...props
-} = defineProps<SelectContentProps & { class?: HTMLAttributes['class'] }>()
-const emits = defineEmits<SelectContentEmits>()
-const forwarded = useForwardPropsEmits(props, emits)
+} = defineProps<SelectContentProps & { class?: HTMLAttributes["class"] }>();
+const emits = defineEmits<SelectContentEmits>();
+const forwarded = useForwardPropsEmits(props, emits);
 </script>
 
 <template>
@@ -32,24 +32,29 @@ const forwarded = useForwardPropsEmits(props, emits)
           POPOVER_ANIMATION,
           position === 'popper' &&
             'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
-          className,
+          className
         )
       "
     >
-      <SelectScrollUpButton class="flex cursor-default items-center justify-center py-1">
+      <SelectScrollUpButton
+        class="flex cursor-default items-center justify-center py-1"
+      >
         <ChevronUp class="h-4 w-4" aria-hidden="true" />
       </SelectScrollUpButton>
       <SelectViewport
         :class="
           cn(
             'p-1',
-            position === 'popper' && 'h-(--reka-select-trigger-height) w-full min-w-(--reka-select-trigger-width)',
+            position === 'popper' &&
+              'h-(--reka-select-trigger-height) w-full min-w-(--reka-select-trigger-width)'
           )
         "
       >
         <slot />
       </SelectViewport>
-      <SelectScrollDownButton class="flex cursor-default items-center justify-center py-1">
+      <SelectScrollDownButton
+        class="flex cursor-default items-center justify-center py-1"
+      >
         <ChevronDown class="h-4 w-4" aria-hidden="true" />
       </SelectScrollDownButton>
     </SelectContent>

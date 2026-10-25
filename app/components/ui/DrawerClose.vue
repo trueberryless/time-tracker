@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { DrawerClose } from 'vaul-vue'
+import { DrawerClose } from "vaul-vue";
 
-const { asChild } = defineProps<{ asChild?: boolean }>()
+const { asChild } = defineProps<{ asChild?: boolean }>();
 </script>
 
 <template>

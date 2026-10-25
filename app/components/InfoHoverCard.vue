@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { BadgeInfo } from '@lucide/vue'
+import { BadgeInfo } from "@lucide/vue";
 
-const { label } = defineProps<{ label: string }>()
-const open = ref(false)
+const { label } = defineProps<{ label: string }>();
+const open = ref(false);
 </script>
 
 <template>

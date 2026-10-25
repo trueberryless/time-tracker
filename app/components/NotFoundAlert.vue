@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { AlertCircle } from '@lucide/vue'
+import { AlertCircle } from "@lucide/vue";
 
-const { entity, backTo } = defineProps<{ backTo: string; entity: string }>()
+const { entity, backTo } = defineProps<{ backTo: string; entity: string }>();
 </script>
 
 <template>
@@ -11,7 +11,9 @@ const { entity, backTo } = defineProps<{ backTo: string; entity: string }>()
       <AlertTitle>Not found</AlertTitle>
       <AlertDescription>
         This {{ entity }} does not exist (anymore).
-        <NuxtLink :to="backTo" class="font-medium underline underline-offset-4">Go back to all {{ entity }}s.</NuxtLink>
+        <NuxtLink :to="backTo" class="font-medium underline underline-offset-4"
+          >Go back to all {{ entity }}s.</NuxtLink
+        >
       </AlertDescription>
     </Alert>
   </PageContainer>

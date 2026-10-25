@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { Check } from '@lucide/vue'
+import { Check } from "@lucide/vue";
 import {
   DropdownMenuCheckboxItem,
   type DropdownMenuCheckboxItemEmits,
   type DropdownMenuCheckboxItemProps,
   DropdownMenuItemIndicator,
   useForwardPropsEmits,
-} from 'reka-ui'
-import type { HTMLAttributes } from 'vue'
+} from "reka-ui";
+import type { HTMLAttributes } from "vue";
 
 const { class: className, ...props } = defineProps<
-  DropdownMenuCheckboxItemProps & { class?: HTMLAttributes['class'] }
->()
-const emits = defineEmits<DropdownMenuCheckboxItemEmits>()
-const forwarded = useForwardPropsEmits(props, emits)
+  DropdownMenuCheckboxItemProps & { class?: HTMLAttributes["class"] }
+>();
+const emits = defineEmits<DropdownMenuCheckboxItemEmits>();
+const forwarded = useForwardPropsEmits(props, emits);
 </script>
 
 <template>
@@ -22,7 +22,7 @@ const forwarded = useForwardPropsEmits(props, emits)
     :class="
       cn(
         'focus:bg-accent focus:text-accent-foreground relative flex cursor-default items-center rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden transition-colors select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-        className,
+        className
       )
     "
   >
