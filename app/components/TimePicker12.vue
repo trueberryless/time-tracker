@@ -1,23 +1,28 @@
 <script setup lang="ts">
-const { label } = defineProps<{ label: string }>()
-const date = defineModel<Date>('date', { required: true })
-const id = useId()
-const period = ref<Period>(getPeriod(date.value))
-const hours = useTemplateRef<{ focus: () => void }>('hours')
-const minutes = useTemplateRef<{ focus: () => void }>('minutes')
-const seconds = useTemplateRef<{ focus: () => void }>('seconds')
-const periodTrigger = useTemplateRef<{ $el: HTMLElement }>('periodTrigger')
+const { label } = defineProps<{ label: string }>();
+const date = defineModel<Date>("date", { required: true });
+const id = useId();
+const period = ref<Period>(getPeriod(date.value));
+const hours = useTemplateRef<{ focus: () => void }>("hours");
+const minutes = useTemplateRef<{ focus: () => void }>("minutes");
+const seconds = useTemplateRef<{ focus: () => void }>("seconds");
+const periodTrigger = useTemplateRef<{ $el: HTMLElement }>("periodTrigger");
 
 const periodValue = computed({
   get: () => period.value,
   set: (value: Period) => {
-    period.value = value
-    date.value = setDateByType(new Date(date.value), display12HourValue(date.value.getHours()), '12hours', value)
+    period.value = value;
+    date.value = setDateByType(
+      new Date(date.value),
+      display12HourValue(date.value.getHours()),
+      "12hours",
+      value
+    );
   },
-})
+});
 
 function handlePeriodKeydown(event: KeyboardEvent) {
-  if (event.key === 'ArrowLeft') seconds.value?.focus()
+  if (event.key === "ArrowLeft") seconds.value?.focus();
 }
 </script>
 

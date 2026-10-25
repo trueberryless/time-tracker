@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const MARGIN = 5
-const AXIS_HEIGHT = 30
-const TICK_OFFSET = 16
+const MARGIN = 5;
+const AXIS_HEIGHT = 30;
+const TICK_OFFSET = 16;
 
 const {
   aspect = 16 / 9,
@@ -17,57 +17,73 @@ const {
   showValueLabels = true,
   title,
 } = defineProps<{
-  aspect?: number
-  color: string
-  data: BarDatum[]
-  fixedHeight?: number
-  labelThreshold?: number
-  radius?: number
-  seriesLabel: string
-  showAxis?: boolean
-  showGrid?: boolean
-  showTooltip?: boolean
-  showValueLabels?: boolean
-  title: string
-}>()
+  aspect?: number;
+  color: string;
+  data: BarDatum[];
+  fixedHeight?: number;
+  labelThreshold?: number;
+  radius?: number;
+  seriesLabel: string;
+  showAxis?: boolean;
+  showGrid?: boolean;
+  showTooltip?: boolean;
+  showValueLabels?: boolean;
+  title: string;
+}>();
 
-const container = useTemplateRef<HTMLElement>('container')
-const { width } = useElementSize(container)
-const height = computed(() => fixedHeight ?? width.value / aspect)
-const hovered = ref<number | null>(null)
-const pointer = ref({ x: 0, y: 0 })
+const container = useTemplateRef<HTMLElement>("container");
+const { width } = useElementSize(container);
+const height = computed(() => fixedHeight ?? width.value / aspect);
+const hovered = ref<number | null>(null);
+const pointer = ref({ x: 0, y: 0 });
 
-const ticks = computed(() => getNiceTicks(Math.max(0, ...data.map((d) => d.value))))
+const ticks = computed(() =>
+  getNiceTicks(Math.max(0, ...data.map((d) => d.value)))
+);
 const plot = computed(() => {
-  const bottom = height.value - MARGIN - (showAxis ? AXIS_HEIGHT : 0)
-  return { bottom, height: bottom - MARGIN, left: MARGIN, top: MARGIN, width: width.value - MARGIN * 2 }
-})
-const yMax = computed(() => ticks.value.at(-1) || 1)
-const band = computed(() => (data.length ? plot.value.width / data.length : 0))
+  const bottom = height.value - MARGIN - (showAxis ? AXIS_HEIGHT : 0);
+  return {
+    bottom,
+    height: bottom - MARGIN,
+    left: MARGIN,
+    top: MARGIN,
+    width: width.value - MARGIN * 2,
+  };
+});
+const yMax = computed(() => ticks.value.at(-1) || 1);
+const band = computed(() => (data.length ? plot.value.width / data.length : 0));
 
 const bars = computed(() =>
   data.map((datum, index) => {
-    const barHeight = (datum.value / yMax.value) * plot.value.height
-    const barWidth = band.value * 0.8
-    const x = plot.value.left + index * band.value + band.value * 0.1
-    const y = plot.value.bottom - barHeight
-    return { ...datum, centerX: x + barWidth / 2, path: getRoundedTopBarPath(x, y, barWidth, barHeight, radius), y }
-  }),
-)
+    const barHeight = (datum.value / yMax.value) * plot.value.height;
+    const barWidth = band.value * 0.8;
+    const x = plot.value.left + index * band.value + band.value * 0.1;
+    const y = plot.value.bottom - barHeight;
+    return {
+      ...datum,
+      centerX: x + barWidth / 2,
+      path: getRoundedTopBarPath(x, y, barWidth, barHeight, radius),
+      y,
+    };
+  })
+);
 
 const tooltipItems = computed(() => {
-  if (hovered.value === null) return []
-  const datum = data[hovered.value]
-  return datum ? [{ color, name: seriesLabel, value: datum.value }] : []
-})
+  if (hovered.value === null) return [];
+  const datum = data[hovered.value];
+  return datum ? [{ color, name: seriesLabel, value: datum.value }] : [];
+});
 
 function trackPointer(event: PointerEvent) {
-  if (!container.value || band.value === 0) return
-  const rect = container.value.getBoundingClientRect()
-  const x = event.clientX - rect.left
-  const index = Math.floor((x - plot.value.left) / band.value)
-  hovered.value = index >= 0 && index < data.length ? index : null
-  pointer.value = { x: Math.min(x + 10, rect.width - 140), y: event.clientY - rect.top + 10 }
+  if (!container.value || band.value === 0) return;
+  const rect = container.value.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const index = Math.floor((x - plot.value.left) / band.value);
+  hovered.value = index >= 0 && index < data.length ? index : null;
+  pointer.value = {
+    x: Math.min(x + 10, rect.width - 140),
+    y: event.clientY - rect.top + 10,
+  };
 }
 </script>
 
@@ -75,7 +91,9 @@ function trackPointer(event: PointerEvent) {
   <figure
     ref="container"
     :class="cn('relative m-0 flex w-full justify-center text-xs')"
-    :style="fixedHeight ? { height: `${fixedHeight}px` } : { aspectRatio: aspect }"
+    :style="
+      fixedHeight ? { height: `${fixedHeight}px` } : { aspectRatio: aspect }
+    "
   >
     <svg
       v-if="width > 0"
@@ -99,9 +117,17 @@ function trackPointer(event: PointerEvent) {
         />
       </g>
       <g v-for="bar in bars" :key="bar.label">
-        <path :d="bar.path" :style="{ fill: color }" class="motion-safe:transition-[d]" />
+        <path
+          :d="bar.path"
+          :style="{ fill: color }"
+          class="motion-safe:transition-[d]"
+        />
         <text
-          v-if="showValueLabels && labelThreshold !== undefined && bar.value > labelThreshold"
+          v-if="
+            showValueLabels &&
+            labelThreshold !== undefined &&
+            bar.value > labelThreshold
+          "
           :x="bar.centerX"
           :y="bar.y + 20"
           text-anchor="middle"
@@ -124,7 +150,12 @@ function trackPointer(event: PointerEvent) {
         </text>
       </g>
     </svg>
-    <ChartTooltip v-if="tooltipItems.length" :items="tooltipItems" :x="pointer.x" :y="pointer.y" />
+    <ChartTooltip
+      v-if="tooltipItems.length"
+      :items="tooltipItems"
+      :x="pointer.x"
+      :y="pointer.y"
+    />
     <figcaption class="sr-only">
       <table>
         <caption>

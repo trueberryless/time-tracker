@@ -1,22 +1,42 @@
 <script setup lang="ts">
-import { TrendingDown, TrendingUp } from '@lucide/vue'
+import { TrendingDown, TrendingUp } from "@lucide/vue";
 
-const { class: className } = defineProps<{ class?: string }>()
-const { user } = useTracker()
+const { class: className } = defineProps<{ class?: string }>();
+const { user } = useTracker();
 
 const views = computed(() => {
-  if (!user.value) return []
+  if (!user.value) return [];
   return [
-    { chart: getVisitsByWeekday(user.value), description: 'Grouped by weekday', group: 'weekday', value: 'week' },
-    { chart: getVisitsByMonth(user.value), description: 'Grouped by month', group: 'month', value: 'month' },
-    { chart: getVisitsByYear(user.value), description: 'Grouped by year', group: 'year', value: 'year' },
-  ]
-})
+    {
+      chart: getVisitsByWeekday(user.value),
+      description: "Grouped by weekday",
+      group: "weekday",
+      value: "week",
+    },
+    {
+      chart: getVisitsByMonth(user.value),
+      description: "Grouped by month",
+      group: "month",
+      value: "month",
+    },
+    {
+      chart: getVisitsByYear(user.value),
+      description: "Grouped by year",
+      group: "year",
+      value: "year",
+    },
+  ];
+});
 </script>
 
 <template>
   <Tabs default-value="week" :class="cn(className, 'mt-0')">
-    <TabsContent v-for="view in views" :key="view.value" :value="view.value" class="mt-0 h-full">
+    <TabsContent
+      v-for="view in views"
+      :key="view.value"
+      :value="view.value"
+      class="mt-0 h-full"
+    >
       <Card class="flex h-full flex-col justify-between">
         <CardHeader class="flex flex-row justify-between">
           <div class="space-y-1.5">
@@ -40,9 +60,18 @@ const views = computed(() => {
         </CardContent>
         <CardFooter class="flex-col items-start gap-2 text-sm">
           <div class="flex gap-2 leading-none font-medium">
-            {{ formatVisitPercentage(view.chart.current, view.chart.average) }} {{ view.chart.periodText }}
-            <TrendingUp v-if="view.chart.current / view.chart.average >= 1" class="h-4 w-4" aria-hidden="true" />
-            <TrendingDown v-if="view.chart.current / view.chart.average < 1" class="h-4 w-4" aria-hidden="true" />
+            {{ formatVisitPercentage(view.chart.current, view.chart.average) }}
+            {{ view.chart.periodText }}
+            <TrendingUp
+              v-if="view.chart.current / view.chart.average >= 1"
+              class="h-4 w-4"
+              aria-hidden="true"
+            />
+            <TrendingDown
+              v-if="view.chart.current / view.chart.average < 1"
+              class="h-4 w-4"
+              aria-hidden="true"
+            />
           </div>
           <div class="text-muted-foreground leading-none">
             Showing all your visits of this website grouped by {{ view.group }}.

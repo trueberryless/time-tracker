@@ -1,19 +1,19 @@
 <script setup lang="ts">
 const {
-  indicator = 'dot',
+  indicator = "dot",
   items,
   label,
   x,
   y,
 } = defineProps<{
-  indicator?: 'dot' | 'line'
-  items: ChartTooltipItem[]
-  label?: string
-  x: number
-  y: number
-}>()
+  indicator?: "dot" | "line";
+  items: ChartTooltipItem[];
+  label?: string;
+  x: number;
+  y: number;
+}>();
 
-const nestLabel = computed(() => items.length === 1 && indicator !== 'dot')
+const nestLabel = computed(() => items.length === 1 && indicator !== "dot");
 </script>
 
 <template>
@@ -27,18 +27,38 @@ const nestLabel = computed(() => items.length === 1 && indicator !== 'dot')
       <div
         v-for="item in items"
         :key="item.name"
-        :class="cn('flex w-full items-stretch gap-2', indicator === 'dot' && 'items-center')"
+        :class="
+          cn(
+            'flex w-full items-stretch gap-2',
+            indicator === 'dot' && 'items-center'
+          )
+        "
       >
         <div
-          :class="cn('shrink-0 rounded-[2px]', indicator === 'dot' ? 'h-2.5 w-2.5' : 'w-1')"
+          :class="
+            cn(
+              'shrink-0 rounded-[2px]',
+              indicator === 'dot' ? 'h-2.5 w-2.5' : 'w-1'
+            )
+          "
           :style="{ background: item.color, borderColor: item.color }"
         />
-        <div :class="cn('flex flex-1 justify-between leading-none', nestLabel ? 'items-end' : 'items-center')">
+        <div
+          :class="
+            cn(
+              'flex flex-1 justify-between leading-none',
+              nestLabel ? 'items-end' : 'items-center'
+            )
+          "
+        >
           <div class="grid gap-1.5">
             <div v-if="label && nestLabel" class="font-medium">{{ label }}</div>
             <span class="text-muted-foreground">{{ item.name }}</span>
           </div>
-          <span v-if="item.value" class="text-foreground font-mono font-medium tabular-nums">
+          <span
+            v-if="item.value"
+            class="text-foreground font-mono font-medium tabular-nums"
+          >
             {{ item.value.toLocaleString() }}
           </span>
         </div>

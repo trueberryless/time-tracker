@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { AlertCircle } from '@lucide/vue'
+import { AlertCircle } from "@lucide/vue";
 
-const { isAccount } = useTracker()
+const { isAccount } = useTracker();
 </script>
 
 <template>
@@ -12,8 +12,8 @@ const { isAccount } = useTracker()
       <AlertDescription>
         {{
           isAccount
-            ? 'We are currently trying to fetch your data from your ATproto repository.'
-            : 'We are currently trying to fetch your data from your local storage.'
+            ? "We are currently trying to fetch your data from your ATproto repository."
+            : "We are currently trying to fetch your data from your local storage."
         }}
       </AlertDescription>
     </Alert>

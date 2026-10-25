@@ -4,13 +4,18 @@ const {
   name,
   running = false,
 } = defineProps<{
-  archived?: boolean
-  name: string
-  running?: boolean
-}>()
+  archived?: boolean;
+  name: string;
+  running?: boolean;
+}>();
 
-const breakpoint = useTableBreakpoint()
-const showBadges = computed(() => breakpoint.value === 'md' || breakpoint.value === 'lg' || breakpoint.value === 'xl')
+const breakpoint = useTableBreakpoint();
+const showBadges = computed(
+  () =>
+    breakpoint.value === "md" ||
+    breakpoint.value === "lg" ||
+    breakpoint.value === "xl"
+);
 </script>
 
 <template>

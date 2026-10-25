@@ -1,9 +1,14 @@
 <script setup lang="ts">
-const { class: className, dateRange } = defineProps<{ class?: string; dateRange: DateRange | undefined }>()
-const { user } = useTracker()
+const { class: className, dateRange } = defineProps<{
+  class?: string;
+  dateRange: DateRange | undefined;
+}>();
+const { user } = useTracker();
 
-const series = computed(() => (user.value ? getFlowRadarSeries(user.value, dateRange) : []))
-const axes = flows.map((flow) => flow.label)
+const series = computed(() =>
+  user.value ? getFlowRadarSeries(user.value, dateRange) : []
+);
+const axes = flows.map((flow) => flow.label);
 </script>
 
 <template>
@@ -20,7 +25,9 @@ const axes = flows.map((flow) => flow.label)
       />
     </CardContent>
     <CardFooter class="flex-col gap-2 text-sm">
-      <div class="flex items-center gap-2 leading-none font-medium">{{ getFlowRadarHelperText(series) }}</div>
+      <div class="flex items-center gap-2 leading-none font-medium">
+        {{ getFlowRadarHelperText(series) }}
+      </div>
       <div class="text-muted-foreground flex items-center gap-2 leading-none">
         Showing session grouped by priority of their tasks
       </div>

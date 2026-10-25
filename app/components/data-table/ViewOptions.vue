@@ -1,8 +1,11 @@
 <script setup lang="ts" generic="T">
-import { SlidersHorizontalIcon } from '@lucide/vue'
+import { SlidersHorizontalIcon } from "@lucide/vue";
 
-const { columns, hidden } = defineProps<{ columns: TableColumn<T>[]; hidden: Set<string> }>()
-const emit = defineEmits<{ toggle: [id: string, visible: boolean] }>()
+const { columns, hidden } = defineProps<{
+  columns: TableColumn<T>[];
+  hidden: Set<string>;
+}>();
+const emit = defineEmits<{ toggle: [id: string, visible: boolean] }>();
 </script>
 
 <template>
@@ -21,7 +24,9 @@ const emit = defineEmits<{ toggle: [id: string, visible: boolean] }>()
         :key="column.id"
         class="capitalize"
         :model-value="!hidden.has(column.id)"
-        @update:model-value="(value) => emit('toggle', column.id, Boolean(value))"
+        @update:model-value="
+          (value) => emit('toggle', column.id, Boolean(value))
+        "
       >
         {{ column.id }}
       </DropdownMenuCheckboxItem>

@@ -1,10 +1,19 @@
 <script setup lang="ts">
-const { class: className, dateRange } = defineProps<{ class?: string; dateRange: DateRange | undefined }>()
-const { user } = useTracker()
+const { class: className, dateRange } = defineProps<{
+  class?: string;
+  dateRange: DateRange | undefined;
+}>();
+const { user } = useTracker();
 
-const data = computed(() => (user.value ? getTaskAmountChartData(user.value, dateRange) : []))
-const total = computed(() => data.value.reduce((sum, slice) => sum + slice.value, 0))
-const shownProjects = computed(() => data.value.filter((slice) => slice.value !== 0).length)
+const data = computed(() =>
+  user.value ? getTaskAmountChartData(user.value, dateRange) : []
+);
+const total = computed(() =>
+  data.value.reduce((sum, slice) => sum + slice.value, 0)
+);
+const shownProjects = computed(
+  () => data.value.filter((slice) => slice.value !== 0).length
+);
 </script>
 
 <template>
@@ -22,9 +31,13 @@ const shownProjects = computed(() => data.value.filter((slice) => slice.value !=
       />
     </CardContent>
     <CardFooter class="flex-col gap-2 text-sm">
-      <div class="flex items-center gap-2 leading-none font-medium">{{ getTaskAmountHelperText(data) }}</div>
+      <div class="flex items-center gap-2 leading-none font-medium">
+        {{ getTaskAmountHelperText(data) }}
+      </div>
       <div class="text-muted-foreground leading-none">
-        Showing top {{ shownProjects }} project{{ shownProjects === 1 ? '' : 's' }}
+        Showing top {{ shownProjects }} project{{
+          shownProjects === 1 ? "" : "s"
+        }}
       </div>
     </CardFooter>
   </Card>
