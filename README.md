@@ -71,11 +71,11 @@ pnpm lexicons:publish
 
 ## Star History
 
-<a href="https://star-history.com/#trueberryless-org/true-tracker&Date">
+<a href="https://star-history.com/#trueberryless/time-tracker&Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=trueberryless-org/true-tracker&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=trueberryless-org/true-tracker&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=trueberryless-org/true-tracker&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=trueberryless/time-tracker&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=trueberryless/time-tracker&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=trueberryless/time-tracker&type=Date" />
  </picture>
 </a>
 
