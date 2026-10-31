@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Moon, Sun } from "@lucide/vue";
+import { Moon, Sun } from '@lucide/vue'
 
-const colorMode = useColorMode();
+const colorMode = useColorMode()
 </script>
 
 <template>
@@ -20,16 +20,10 @@ const colorMode = useColorMode();
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-      <DropdownMenuItem @select="colorMode.preference = 'light'"
-        >Light</DropdownMenuItem
-      >
-      <DropdownMenuItem @select="colorMode.preference = 'dark'"
-        >Dark</DropdownMenuItem
-      >
+      <DropdownMenuItem @select="colorMode.preference = 'light'">Light</DropdownMenuItem>
+      <DropdownMenuItem @select="colorMode.preference = 'dark'">Dark</DropdownMenuItem>
       <DropdownMenuSeparator />
-      <DropdownMenuItem @select="colorMode.preference = 'system'"
-        >System</DropdownMenuItem
-      >
+      <DropdownMenuItem @select="colorMode.preference = 'system'">System</DropdownMenuItem>
     </DropdownMenuContent>
   </DropdownMenu>
 </template>

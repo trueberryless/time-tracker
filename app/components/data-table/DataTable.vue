@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends { id: string }">
-import { Plus } from "@lucide/vue";
+import { Plus } from '@lucide/vue'
 
 const {
   columns,
@@ -11,55 +11,43 @@ const {
   rowTo,
   title,
 } = defineProps<{
-  columns: TableColumn<T>[];
-  createLabel?: string;
-  createTo?: string | ((filters: TableFilters) => string | undefined);
-  data: T[];
-  initialFilters?: TableFilters;
-  pageSizes?: number[];
-  rowTo: (row: T) => string;
-  title: string;
-}>();
+  columns: TableColumn<T>[]
+  createLabel?: string
+  createTo?: string | ((filters: TableFilters) => string | undefined)
+  data: T[]
+  initialFilters?: TableFilters
+  pageSizes?: number[]
+  rowTo: (row: T) => string
+  title: string
+}>()
 
 defineSlots<
   {
-    [K in `cell-${string}`]?: (props: { row: T }) => unknown;
+    [K in `cell-${string}`]?: (props: { row: T }) => unknown
   } & {
-    toolbar?: (props: { table: DataTable<T> }) => unknown;
+    toolbar?: (props: { table: DataTable<T> }) => unknown
   }
->();
+>()
 
-const breakpoint = useTableBreakpoint();
+const breakpoint = useTableBreakpoint()
 const table = useDataTable<T>({
   columns: () => columns,
   data: () => data,
-  paginate: () => breakpoint.value !== "mobile",
-});
-if (initialFilters) table.filters.value = { ...initialFilters };
+  paginate: () => breakpoint.value !== 'mobile',
+})
+if (initialFilters) table.filters.value = { ...initialFilters }
 
-const createLink = computed(() =>
-  typeof createTo === "function" ? createTo(table.filters.value) : createTo
-);
-const {
-  pageCount,
-  pageIndex,
-  pageRows,
-  pageSize,
-  setColumnVisible,
-  sortedRows,
-  sorting,
-  visibleColumns,
-} = table;
+const createLink = computed(() => (typeof createTo === 'function' ? createTo(table.filters.value) : createTo))
+const { pageCount, pageIndex, pageRows, pageSize, setColumnVisible, sortedRows, sorting, visibleColumns } = table
 
 function ariaSort(columnId: string) {
-  if (sorting.value?.id !== columnId) return undefined;
-  return sorting.value.desc ? "descending" : "ascending";
+  if (sorting.value?.id !== columnId) return undefined
+  return sorting.value.desc ? 'descending' : 'ascending'
 }
 
 function openRow(row: T, event: MouseEvent) {
-  if ((event.target as HTMLElement).closest('a, button, [role="menuitem"]'))
-    return;
-  navigateTo(rowTo(row));
+  if ((event.target as HTMLElement).closest('a, button, [role="menuitem"]')) return
+  navigateTo(rowTo(row))
 }
 </script>
 
@@ -99,9 +87,7 @@ function openRow(row: T, event: MouseEvent) {
                     v-model:sorting="sorting"
                     :column-id="column.id"
                     :title="column.title"
-                    :can-sort="
-                      column.sortable !== false && Boolean(column.accessor)
-                    "
+                    :can-sort="column.sortable !== false && Boolean(column.accessor)"
                     :can-hide="column.hideable !== false"
                     @hide="setColumnVisible(column.id, false)"
                   />
@@ -111,12 +97,7 @@ function openRow(row: T, event: MouseEvent) {
             </TableHeader>
             <TableBody>
               <template v-if="pageRows.length">
-                <TableRow
-                  v-for="row in pageRows"
-                  :key="row.id"
-                  class="cursor-pointer"
-                  @click="openRow(row, $event)"
-                >
+                <TableRow v-for="row in pageRows" :key="row.id" class="cursor-pointer" @click="openRow(row, $event)">
                   <TableCell
                     v-for="(column, index) in visibleColumns"
                     :key="column.id"
@@ -134,11 +115,7 @@ function openRow(row: T, event: MouseEvent) {
                 </TableRow>
               </template>
               <TableRow v-else>
-                <TableCell
-                  :colspan="visibleColumns.length"
-                  class="h-24 text-center"
-                  >No results.</TableCell
-                >
+                <TableCell :colspan="visibleColumns.length" class="h-24 text-center">No results.</TableCell>
               </TableRow>
             </TableBody>
           </Table>

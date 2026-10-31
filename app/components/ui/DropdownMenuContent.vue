@@ -5,18 +5,16 @@ import {
   type DropdownMenuContentProps,
   DropdownMenuPortal,
   useForwardPropsEmits,
-} from "reka-ui";
-import type { HTMLAttributes } from "vue";
+} from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
 
 const {
   class: className,
   sideOffset = 4,
   ...props
-} = defineProps<
-  DropdownMenuContentProps & { class?: HTMLAttributes["class"] }
->();
-const emits = defineEmits<DropdownMenuContentEmits>();
-const forwarded = useForwardPropsEmits(props, emits);
+} = defineProps<DropdownMenuContentProps & { class?: HTMLAttributes['class'] }>()
+const emits = defineEmits<DropdownMenuContentEmits>()
+const forwarded = useForwardPropsEmits(props, emits)
 </script>
 
 <template>
@@ -28,7 +26,7 @@ const forwarded = useForwardPropsEmits(props, emits);
         cn(
           'bg-popover text-popover-foreground z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-md',
           POPOVER_ANIMATION,
-          className
+          className,
         )
       "
     >

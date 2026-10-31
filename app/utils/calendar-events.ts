@@ -1,10 +1,7 @@
-const PROJECT_COLOR_COUNT = 5;
+const PROJECT_COLOR_COUNT = 5
 
-export function getCalendarEvents(
-  user: User,
-  options: CalendarEventOptions = {}
-): CalendarEvent[] {
-  const { taskId } = options;
+export function getCalendarEvents(user: User, options: CalendarEventOptions = {}): CalendarEvent[] {
+  const { taskId } = options
 
   return user.projects.flatMap((project, projectIndex) =>
     project.tasks
@@ -20,27 +17,22 @@ export function getCalendarEvents(
           start: session.start,
           taskId: task.id,
           taskName: task.name,
-        }))
-      )
-  );
+        })),
+      ),
+  )
 }
 
 export function getEditableTasks(user: User): EditableTask[] {
   return user.projects
     .filter((project) => !isProjectArchived(project))
-    .flatMap((project) =>
-      project.tasks.map((task) => ({
-        id: task.id,
-        label: `${project.name} - ${task.name}`,
-      }))
-    );
+    .flatMap((project) => project.tasks.map((task) => ({ id: task.id, label: `${project.name} - ${task.name}` })))
 }
 
 export interface CalendarEventOptions {
-  taskId?: string;
+  taskId?: string
 }
 
 export interface EditableTask {
-  id: string;
-  label: string;
+  id: string
+  label: string
 }

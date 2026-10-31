@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { user } = useTracker();
-const currentTheme = computed(() => user.value?.settings.theme ?? "default");
+const { user } = useTracker()
+const currentTheme = computed(() => user.value?.settings.theme ?? 'default')
 </script>
 
 <template>
@@ -11,12 +11,7 @@ const currentTheme = computed(() => user.value?.settings.theme ?? "default");
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
-      <DropdownMenuItem
-        v-for="theme in themes"
-        :key="theme.value"
-        class="group"
-        @select="setColorTheme(theme.value)"
-      >
+      <DropdownMenuItem v-for="theme in themes" :key="theme.value" class="group" @select="setColorTheme(theme.value)">
         <div class="flex items-center space-x-2">
           <ThemeDiamond :title="theme.label" :color="theme.value" />
           <div aria-hidden="true">{{ theme.label }}</div>

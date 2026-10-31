@@ -1,37 +1,29 @@
 <script setup lang="ts">
-import { format, isToday } from "date-fns";
+import { format, isToday } from 'date-fns'
 
 const { date, events, highlightId, now } = defineProps<{
-  date: Date;
-  events: CalendarEvent[];
-  highlightId?: string;
-  now: Date;
-}>();
-const emit = defineEmits<{
-  open: [event: CalendarEvent];
-  selectDay: [day: Date];
-}>();
+  date: Date
+  events: CalendarEvent[]
+  highlightId?: string
+  now: Date
+}>()
+const emit = defineEmits<{ open: [event: CalendarEvent]; selectDay: [day: Date] }>()
 
 const groups = computed(() =>
-  getRangeDays(getViewRange("schedule", date))
+  getRangeDays(getViewRange('schedule', date))
     .map((day) => ({ day, events: getEventsOnDay(events, day, now) }))
-    .filter((group) => group.events.length > 0)
-);
+    .filter((group) => group.events.length > 0),
+)
 
 function getDuration(event: CalendarEvent) {
-  return formatDurationShort(
-    (event.end ?? now).getTime() - event.start.getTime()
-  );
+  return formatDurationShort((event.end ?? now).getTime() - event.start.getTime())
 }
 </script>
 
 <template>
   <div class="rounded-md border">
-    <p
-      v-if="groups.length === 0"
-      class="text-muted-foreground p-6 text-center text-sm"
-    >
-      No sessions in {{ format(date, "MMMM yyyy") }}.
+    <p v-if="groups.length === 0" class="text-muted-foreground p-6 text-center text-sm">
+      No sessions in {{ format(date, 'MMMM yyyy') }}.
     </p>
     <ol v-else class="divide-y">
       <li
@@ -49,13 +41,13 @@ function getDuration(event: CalendarEvent) {
               :class="
                 cn(
                   'flex h-7 w-7 shrink-0 items-center justify-center rounded-full',
-                  isToday(group.day) && 'bg-primary text-primary-foreground'
+                  isToday(group.day) && 'bg-primary text-primary-foreground',
                 )
               "
             >
-              {{ format(group.day, "d") }}
+              {{ format(group.day, 'd') }}
             </span>
-            <span>{{ format(group.day, "EEEE") }}</span>
+            <span>{{ format(group.day, 'EEEE') }}</span>
           </button>
         </h3>
         <ul class="min-w-0 space-y-1">
@@ -65,7 +57,7 @@ function getDuration(event: CalendarEvent) {
               :class="
                 cn(
                   'hover:bg-accent focus-visible:ring-ring flex w-full items-center gap-3 rounded-md px-2 py-1.5 text-left text-sm outline-hidden focus-visible:ring-2',
-                  calendarEvent.id === highlightId && 'bg-accent'
+                  calendarEvent.id === highlightId && 'bg-accent',
                 )
               "
               :aria-label="getEventLabel(calendarEvent)"
@@ -81,19 +73,16 @@ function getDuration(event: CalendarEvent) {
               }}</span>
               <span class="min-w-0 flex-1 truncate">
                 <span class="font-medium">{{ calendarEvent.taskName }}</span>
-                <span class="text-muted-foreground">
-                  · {{ calendarEvent.projectName }}</span
-                >
+                <span class="text-muted-foreground"> · {{ calendarEvent.projectName }}</span>
               </span>
               <OptionLabel
                 :options="flows"
                 :value="calendarEvent.flow"
                 class="text-muted-foreground [&>svg]:text-muted-foreground max-md:hidden"
               />
-              <span
-                class="w-24 shrink-0 text-right font-medium whitespace-nowrap tabular-nums"
-                >{{ getDuration(calendarEvent) }}</span
-              >
+              <span class="w-24 shrink-0 text-right font-medium whitespace-nowrap tabular-nums">{{
+                getDuration(calendarEvent)
+              }}</span>
             </button>
           </li>
         </ul>

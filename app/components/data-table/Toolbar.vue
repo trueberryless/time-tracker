@@ -1,39 +1,32 @@
 <script setup lang="ts" generic="T">
-import { XIcon } from "@lucide/vue";
+import { XIcon } from '@lucide/vue'
 
 const { facetedFilters, searchColumn, searchPlaceholder, table } = defineProps<{
-  facetedFilters: {
-    columnId: string;
-    options: FilterOption[];
-    title: string;
-  }[];
-  searchColumn?: string;
-  searchPlaceholder?: string;
-  table: DataTable<T>;
-}>();
+  facetedFilters: { columnId: string; options: FilterOption[]; title: string }[]
+  searchColumn?: string
+  searchPlaceholder?: string
+  table: DataTable<T>
+}>()
 
 const searchValue = computed({
-  get: () =>
-    searchColumn ? String(table.filters.value[searchColumn] ?? "") : "",
+  get: () => (searchColumn ? String(table.filters.value[searchColumn] ?? '') : ''),
   set: (value: string) => {
-    if (searchColumn) table.setFilter(searchColumn, value);
+    if (searchColumn) table.setFilter(searchColumn, value)
   },
-});
+})
 
 function filterModel(columnId: string) {
   return computed({
     get: () => table.filters.value[columnId] as string[] | undefined,
     set: (value: string[] | undefined) => table.setFilter(columnId, value),
-  });
+  })
 }
 
 const models = computed(() =>
   facetedFilters
-    .filter((filter) =>
-      table.visibleColumns.value.some((column) => column.id === filter.columnId)
-    )
-    .map((filter) => ({ ...filter, model: filterModel(filter.columnId) }))
-);
+    .filter((filter) => table.visibleColumns.value.some((column) => column.id === filter.columnId))
+    .map((filter) => ({ ...filter, model: filterModel(filter.columnId) })),
+)
 </script>
 
 <template>
@@ -54,12 +47,7 @@ const models = computed(() =>
         :options="filter.options"
         :facets="table.getFacets(filter.columnId)"
       />
-      <Button
-        v-if="table.isFiltered.value"
-        variant="ghost"
-        class="h-8 px-2 lg:px-3"
-        @click="table.resetFilters()"
-      >
+      <Button v-if="table.isFiltered.value" variant="ghost" class="h-8 px-2 lg:px-3" @click="table.resetFilters()">
         Reset
         <XIcon class="ml-2 h-4 w-4" aria-hidden="true" />
       </Button>

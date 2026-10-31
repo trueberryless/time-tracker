@@ -1,21 +1,14 @@
 <script setup lang="ts">
-import { EllipsisIcon } from "@lucide/vue";
+import { EllipsisIcon } from '@lucide/vue'
 
-const { editTo, label, viewTo } = defineProps<{
-  editTo?: string;
-  label: string;
-  viewTo: string;
-}>();
+const { editTo, label, viewTo } = defineProps<{ editTo?: string; label: string; viewTo: string }>()
 </script>
 
 <template>
   <div class="flex justify-end">
     <DropdownMenu>
       <DropdownMenuTrigger as-child>
-        <Button
-          variant="ghost"
-          class="data-[state=open]:bg-muted flex h-8 w-8 p-0"
-        >
+        <Button variant="ghost" class="data-[state=open]:bg-muted flex h-8 w-8 p-0">
           <EllipsisIcon class="h-4 w-4" aria-hidden="true" />
           <span class="sr-only">Open menu for {{ label }}</span>
         </Button>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const project = defineModel<Project>({ required: true });
+const project = defineModel<Project>({ required: true })
 </script>
 
 <template>
@@ -8,37 +8,21 @@ const project = defineModel<Project>({ required: true });
       <Card>
         <CardHeader>
           <CardTitle as="h2">Project Details</CardTitle>
-          <CardDescription
-            >Edit the name and description of the project.</CardDescription
-          >
+          <CardDescription>Edit the name and description of the project.</CardDescription>
         </CardHeader>
         <CardContent>
           <div class="grid gap-6">
             <div class="grid gap-3">
               <Label for="project-id">Identifier</Label>
-              <Input
-                id="project-id"
-                :model-value="project.id"
-                class="w-full"
-                disabled
-              />
+              <Input id="project-id" :model-value="project.id" class="w-full" disabled />
             </div>
             <div class="grid gap-3">
               <Label for="project-name">Name</Label>
-              <Input
-                id="project-name"
-                v-model="project.name"
-                class="w-full"
-                required
-              />
+              <Input id="project-name" v-model="project.name" class="w-full" required />
             </div>
             <div class="grid gap-3">
               <Label for="project-description">Description</Label>
-              <Textarea
-                id="project-description"
-                v-model="project.description"
-                class="min-h-36"
-              />
+              <Textarea id="project-description" v-model="project.description" class="min-h-36" />
             </div>
           </div>
         </CardContent>
@@ -65,15 +49,8 @@ const project = defineModel<Project>({ required: true });
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem
-                    v-for="status in projectStatuses"
-                    :key="status.value"
-                    :value="status.value"
-                  >
-                    <OptionLabel
-                      :options="projectStatuses"
-                      :value="status.value"
-                    />
+                  <SelectItem v-for="status in projectStatuses" :key="status.value" :value="status.value">
+                    <OptionLabel :options="projectStatuses" :value="status.value" />
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -94,15 +71,8 @@ const project = defineModel<Project>({ required: true });
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem
-                    v-for="priority in priorities"
-                    :key="priority.value"
-                    :value="priority.value"
-                  >
-                    <OptionLabel
-                      :options="priorities"
-                      :value="priority.value"
-                    />
+                  <SelectItem v-for="priority in priorities" :key="priority.value" :value="priority.value">
+                    <OptionLabel :options="priorities" :value="priority.value" />
                   </SelectItem>
                 </SelectContent>
               </Select>

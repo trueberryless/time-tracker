@@ -1,14 +1,11 @@
 <script setup lang="ts">
-const { confirmLabel = "Continue", showCancel = true } = defineProps<{
-  confirmLabel?: string;
-  showCancel?: boolean;
-}>();
-const open = defineModel<boolean>("open", { default: false });
-const emit = defineEmits<{ confirm: [] }>();
+const { confirmLabel = 'Continue', showCancel = true } = defineProps<{ confirmLabel?: string; showCancel?: boolean }>()
+const open = defineModel<boolean>('open', { default: false })
+const emit = defineEmits<{ confirm: [] }>()
 
 function confirm() {
-  open.value = false;
-  emit("confirm");
+  open.value = false
+  emit('confirm')
 }
 </script>
 

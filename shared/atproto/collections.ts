@@ -1,8 +1,8 @@
-import { defineCollections, defineSpace, scopesFor } from "airspace";
+import { defineCollections, defineSpace, scopesFor } from 'airspace'
 
-import { lexicons } from "./lexicons";
+import { lexicons } from './lexicons'
 
-export const collections = defineCollections(lexicons);
+export const collections = defineCollections(lexicons)
 
 const vault = defineSpace(lexicons.vault, {
   collections: {
@@ -12,14 +12,14 @@ const vault = defineSpace(lexicons.vault, {
     task: collections.task,
     visit: collections.visit,
   },
-});
+})
 
-export const spaces = { vault };
+export const spaces = { vault }
 
 export const scopes = scopesFor({
   collections,
   spaces,
-  manage: ["create", "update", "delete"],
-});
+  manage: ['create', 'update', 'delete'],
+})
 
-export const baseScopes = scopesFor({ collections });
+export const baseScopes = scopesFor({ collections })
