@@ -6,13 +6,7 @@
     "suspicious": "warn",
     "perf": "warn"
   },
-  "ignorePatterns": [
-    ".nuxt/**",
-    ".output/**",
-    "dist/**",
-    "node_modules/**",
-    "public/**"
-  ],
+  "ignorePatterns": [".nuxt/**", ".output/**", "dist/**", "node_modules/**", "public/**"],
   "rules": {
     "no-unused-vars": "warn",
     "no-underscore-dangle": "off",

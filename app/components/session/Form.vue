@@ -1,26 +1,24 @@
 <script setup lang="ts">
-const { tasks } = defineProps<{ tasks?: Task[] }>();
-const session = defineModel<Session>({ required: true });
-const taskId = defineModel<string | undefined>("taskId");
-const taskTrigger = useTemplateRef<{ $el: HTMLElement }>("taskTrigger");
-const taskName = computed(
-  () => tasks?.find((t) => t.id === taskId.value)?.name
-);
+const { tasks } = defineProps<{ tasks?: Task[] }>()
+const session = defineModel<Session>({ required: true })
+const taskId = defineModel<string | undefined>('taskId')
+const taskTrigger = useTemplateRef<{ $el: HTMLElement }>('taskTrigger')
+const taskName = computed(() => tasks?.find((t) => t.id === taskId.value)?.name)
 
 const start = computed({
   get: () => session.value.start,
   set: (value: Date) => {
-    session.value = { ...session.value, start: value };
+    session.value = { ...session.value, start: value }
   },
-});
+})
 const end = computed({
   get: () => session.value.end ?? new Date(),
   set: (value: Date) => {
-    session.value = { ...session.value, end: value };
+    session.value = { ...session.value, end: value }
   },
-});
+})
 
-defineExpose({ focusTask: () => taskTrigger.value?.$el.focus() });
+defineExpose({ focusTask: () => taskTrigger.value?.$el.focus() })
 </script>
 
 <template>
@@ -29,50 +27,28 @@ defineExpose({ focusTask: () => taskTrigger.value?.$el.focus() });
       <Card>
         <CardHeader>
           <CardTitle as="h2">Session Details</CardTitle>
-          <CardDescription
-            >Edit the description of the session.</CardDescription
-          >
+          <CardDescription>Edit the description of the session.</CardDescription>
         </CardHeader>
         <CardContent>
           <div class="grid gap-6">
             <div class="grid gap-3">
               <Label for="session-id">Identifier</Label>
-              <Input
-                id="session-id"
-                :model-value="session.id"
-                class="w-full"
-                disabled
-              />
+              <Input id="session-id" :model-value="session.id" class="w-full" disabled />
             </div>
             <div v-if="tasks" class="grid gap-3">
               <Label for="session-task">Task</Label>
               <Select v-model="taskId">
-                <SelectTrigger
-                  id="session-task"
-                  ref="taskTrigger"
-                  aria-required="true"
-                >
-                  <SelectValue placeholder="Select task">{{
-                    taskName ?? "Select task"
-                  }}</SelectValue>
+                <SelectTrigger id="session-task" ref="taskTrigger" aria-required="true">
+                  <SelectValue placeholder="Select task">{{ taskName ?? 'Select task' }}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem
-                    v-for="task in tasks"
-                    :key="task.id"
-                    :value="task.id"
-                    >{{ task.name }}</SelectItem
-                  >
+                  <SelectItem v-for="task in tasks" :key="task.id" :value="task.id">{{ task.name }}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div class="grid gap-3">
               <Label for="session-description">Description</Label>
-              <Textarea
-                id="session-description"
-                v-model="session.description"
-                class="min-h-36"
-              />
+              <Textarea id="session-description" v-model="session.description" class="min-h-36" />
             </div>
           </div>
         </CardContent>
@@ -96,11 +72,7 @@ defineExpose({ focusTask: () => taskTrigger.value?.$el.focus() });
                   <SelectValue placeholder="Select flow" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem
-                    v-for="flow in flows"
-                    :key="flow.value"
-                    :value="flow.value"
-                  >
+                  <SelectItem v-for="flow in flows" :key="flow.value" :value="flow.value">
                     <OptionLabel :options="flows" :value="flow.value" />
                   </SelectItem>
                 </SelectContent>
@@ -116,8 +88,7 @@ defineExpose({ focusTask: () => taskTrigger.value?.$el.focus() });
               <div class="flex items-center justify-between">
                 <div>Session Start Time</div>
                 <InfoHoverCard label="About the session start time">
-                  We automatically assume that the session lasted for three
-                  hours.
+                  We automatically assume that the session lasted for three hours.
                 </InfoHoverCard>
               </div>
             </CardTitle>
@@ -136,8 +107,7 @@ defineExpose({ focusTask: () => taskTrigger.value?.$el.focus() });
               <div class="flex items-center justify-between">
                 <div>Session End Time</div>
                 <InfoHoverCard label="About the session end time">
-                  We automatically assume that manually added sessions ended
-                  right now.
+                  We automatically assume that manually added sessions ended right now.
                 </InfoHoverCard>
               </div>
             </CardTitle>

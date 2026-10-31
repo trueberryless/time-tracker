@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { Primitive, type PrimitiveProps } from "reka-ui";
-import type { HTMLAttributes } from "vue";
+import { Primitive, type PrimitiveProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
 
 const {
-  as = "button",
+  as = 'button',
   asChild,
   class: className,
   size,
   variant,
-} = defineProps<
-  PrimitiveProps & ButtonVariants & { class?: HTMLAttributes["class"] }
->();
+} = defineProps<PrimitiveProps & ButtonVariants & { class?: HTMLAttributes['class'] }>()
 </script>
 
 <template>

@@ -1,96 +1,75 @@
 <script setup lang="ts">
-import { format, isSameDay, isToday } from "date-fns";
+import { format, isSameDay, isToday } from 'date-fns'
 
-const HOUR_HEIGHT = 48;
-const GRID_HEIGHT = HOUR_HEIGHT * 24;
-const DRAG_THRESHOLD = 4;
-const HOURS = Array.from({ length: 24 }, (_, hour) => hour);
+const HOUR_HEIGHT = 48
+const GRID_HEIGHT = HOUR_HEIGHT * 24
+const DRAG_THRESHOLD = 4
+const HOURS = Array.from({ length: 24 }, (_, hour) => hour)
 
 const { days, events, highlightId, now } = defineProps<{
-  days: Date[];
-  events: CalendarEvent[];
-  highlightId?: string;
-  now: Date;
-}>();
+  days: Date[]
+  events: CalendarEvent[]
+  highlightId?: string
+  now: Date
+}>()
 const emit = defineEmits<{
-  change: [event: CalendarEvent, times: EventTimes];
-  create: [start: Date, end: Date];
-  open: [event: CalendarEvent];
-  selectDay: [day: Date];
-}>();
+  change: [event: CalendarEvent, times: EventTimes]
+  create: [start: Date, end: Date]
+  open: [event: CalendarEvent]
+  selectDay: [day: Date]
+}>()
 
-const scroller = useTemplateRef<HTMLElement>("scroller");
-const drag = shallowRef<DragState | null>(null);
+const scroller = useTemplateRef<HTMLElement>('scroller')
+const drag = shallowRef<DragState | null>(null)
 
 const previewEvents = computed(() => {
-  const state = drag.value;
-  if (!state || state.type === "create" || !state.moved) return events;
-  return events.map((event) =>
-    event.id === state.event.id
-      ? { ...event, ...getDraggedTimes(state) }
-      : event
-  );
-});
+  const state = drag.value
+  if (!state || state.type === 'create' || !state.moved) return events
+  return events.map((event) => (event.id === state.event.id ? { ...event, ...getDraggedTimes(state) } : event))
+})
 
 const columns = computed(() =>
   days.map((day) => ({
     day,
     isToday: isToday(day),
     segments: getDaySegments(previewEvents.value, day, now),
-  }))
-);
+  })),
+)
 
 const createPreview = computed(() => {
-  const state = drag.value;
-  if (state?.type !== "create" || !state.moved) return null;
-  const start = Math.min(state.startMinute, state.currentMinute);
-  const end = Math.max(
-    state.startMinute,
-    state.currentMinute,
-    start + SNAP_MINUTES
-  );
-  return { dayIndex: state.dayIndex, end, start };
-});
+  const state = drag.value
+  if (state?.type !== 'create' || !state.moved) return null
+  const start = Math.min(state.startMinute, state.currentMinute)
+  const end = Math.max(state.startMinute, state.currentMinute, start + SNAP_MINUTES)
+  return { dayIndex: state.dayIndex, end, start }
+})
 
-const nowMinute = computed(() => now.getHours() * 60 + now.getMinutes());
+const nowMinute = computed(() => now.getHours() * 60 + now.getMinutes())
 
 onMounted(() => {
-  const focus = highlightId
-    ? events.find((event) => event.id === highlightId)
-    : undefined;
-  const minute =
-    focus && days.some((day) => isSameDay(day, focus.start))
-      ? focus.start.getHours() * 60
-      : 7 * 60;
-  scroller.value?.scrollTo({
-    top: (minute / 60) * HOUR_HEIGHT - HOUR_HEIGHT / 2,
-  });
-});
+  const focus = highlightId ? events.find((event) => event.id === highlightId) : undefined
+  const minute = focus && days.some((day) => isSameDay(day, focus.start)) ? focus.start.getHours() * 60 : 7 * 60
+  scroller.value?.scrollTo({ top: (minute / 60) * HOUR_HEIGHT - HOUR_HEIGHT / 2 })
+})
 
 function getMinuteFromPointer(event: PointerEvent, column: HTMLElement) {
-  const rect = column.getBoundingClientRect();
-  const minute = ((event.clientY - rect.top) / GRID_HEIGHT) * MINUTES_PER_DAY;
-  return Math.min(MINUTES_PER_DAY, Math.max(0, snapMinutes(minute)));
+  const rect = column.getBoundingClientRect()
+  const minute = ((event.clientY - rect.top) / GRID_HEIGHT) * MINUTES_PER_DAY
+  return Math.min(MINUTES_PER_DAY, Math.max(0, snapMinutes(minute)))
 }
 
 function getDayIndexFromPointer(event: PointerEvent) {
   const element = document
     .elementsFromPoint(event.clientX, event.clientY)
-    .find(
-      (candidate) =>
-        candidate instanceof HTMLElement &&
-        candidate.dataset.dayIndex !== undefined
-    );
-  return element instanceof HTMLElement
-    ? Number(element.dataset.dayIndex)
-    : null;
+    .find((candidate) => candidate instanceof HTMLElement && candidate.dataset.dayIndex !== undefined)
+  return element instanceof HTMLElement ? Number(element.dataset.dayIndex) : null
 }
 
 function startCreate(event: PointerEvent, dayIndex: number) {
-  if (event.button !== 0 || event.target !== event.currentTarget) return;
-  const column = event.currentTarget as HTMLElement;
-  const minute = getMinuteFromPointer(event, column);
-  if (event.pointerType !== "touch") column.setPointerCapture(event.pointerId);
+  if (event.button !== 0 || event.target !== event.currentTarget) return
+  const column = event.currentTarget as HTMLElement
+  const minute = getMinuteFromPointer(event, column)
+  if (event.pointerType !== 'touch') column.setPointerCapture(event.pointerId)
   drag.value = {
     column,
     currentMinute: minute,
@@ -98,19 +77,14 @@ function startCreate(event: PointerEvent, dayIndex: number) {
     moved: false,
     originY: event.clientY,
     startMinute: minute,
-    type: "create",
-  };
+    type: 'create',
+  }
 }
 
-function startMove(
-  event: PointerEvent,
-  calendarEvent: CalendarEvent,
-  dayIndex: number,
-  type: "move" | "resize"
-) {
-  if (event.button !== 0) return;
-  event.stopPropagation();
-  (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+function startMove(event: PointerEvent, calendarEvent: CalendarEvent, dayIndex: number, type: 'move' | 'resize') {
+  if (event.button !== 0) return
+  event.stopPropagation()
+  ;(event.currentTarget as HTMLElement).setPointerCapture(event.pointerId)
   drag.value = {
     dayDelta: 0,
     dayIndex,
@@ -120,102 +94,73 @@ function startMove(
     originX: event.clientX,
     originY: event.clientY,
     type,
-  };
+  }
 }
 
 function updateDrag(event: PointerEvent) {
-  const state = drag.value;
-  if (!state) return;
+  const state = drag.value
+  if (!state) return
 
-  const moved =
-    state.moved || Math.abs(event.clientY - state.originY) > DRAG_THRESHOLD;
-  if (state.type === "create") {
-    drag.value = {
-      ...state,
-      currentMinute: getMinuteFromPointer(event, state.column),
-      moved,
-    };
-    return;
+  const moved = state.moved || Math.abs(event.clientY - state.originY) > DRAG_THRESHOLD
+  if (state.type === 'create') {
+    drag.value = { ...state, currentMinute: getMinuteFromPointer(event, state.column), moved }
+    return
   }
 
-  if (state.event.isReadOnly) return;
+  if (state.event.isReadOnly) return
 
-  const dayIndex = state.type === "move" ? getDayIndexFromPointer(event) : null;
+  const dayIndex = state.type === 'move' ? getDayIndexFromPointer(event) : null
   drag.value = {
     ...state,
     dayDelta: dayIndex === null ? state.dayDelta : dayIndex - state.dayIndex,
-    minuteDelta: snapMinutes(
-      ((event.clientY - state.originY) / HOUR_HEIGHT) * 60
-    ),
+    minuteDelta: snapMinutes(((event.clientY - state.originY) / HOUR_HEIGHT) * 60),
     moved: moved || Math.abs(event.clientX - state.originX) > DRAG_THRESHOLD,
-  };
+  }
 }
 
 function finishDrag() {
-  const state = drag.value;
-  drag.value = null;
-  if (!state) return;
+  const state = drag.value
+  drag.value = null
+  if (!state) return
 
-  if (state.type === "create") {
-    const day = days[state.dayIndex];
-    if (!day) return;
-    const start = state.moved
-      ? Math.min(state.startMinute, state.currentMinute)
-      : state.startMinute;
+  if (state.type === 'create') {
+    const day = days[state.dayIndex]
+    if (!day) return
+    const start = state.moved ? Math.min(state.startMinute, state.currentMinute) : state.startMinute
     const end = state.moved
       ? Math.max(state.startMinute, state.currentMinute, start + SNAP_MINUTES)
-      : Math.min(start + 60, MINUTES_PER_DAY);
-    emit("create", minutesToDate(day, start), minutesToDate(day, end));
-    return;
+      : Math.min(start + 60, MINUTES_PER_DAY)
+    emit('create', minutesToDate(day, start), minutesToDate(day, end))
+    return
   }
 
   if (!state.moved) {
-    emit("open", state.event);
-    return;
+    emit('open', state.event)
+    return
   }
-  emit("change", state.event, getDraggedTimes(state));
+  emit('change', state.event, getDraggedTimes(state))
 }
 
 function getDraggedTimes(state: MoveState): EventTimes {
-  if (state.type === "resize")
-    return resizeEvent(state.event, state.minuteDelta);
-  return moveEvent(
-    state.event,
-    state.minuteDelta + state.dayDelta * MINUTES_PER_DAY,
-    now
-  );
+  if (state.type === 'resize') return resizeEvent(state.event, state.minuteDelta)
+  return moveEvent(state.event, state.minuteDelta + state.dayDelta * MINUTES_PER_DAY, now)
 }
 
-function handleEventKeydown(
-  event: KeyboardEvent,
-  calendarEvent: CalendarEvent
-) {
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    emit("open", calendarEvent);
-    return;
+function handleEventKeydown(event: KeyboardEvent, calendarEvent: CalendarEvent) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault()
+    emit('open', calendarEvent)
+    return
   }
-  if (!event.altKey || calendarEvent.isReadOnly) return;
+  if (!event.altKey || calendarEvent.isReadOnly) return
 
-  const step =
-    event.key === "ArrowUp"
-      ? -SNAP_MINUTES
-      : event.key === "ArrowDown"
-        ? SNAP_MINUTES
-        : 0;
-  const dayStep =
-    event.key === "ArrowLeft" ? -1 : event.key === "ArrowRight" ? 1 : 0;
-  if (!step && !dayStep) return;
+  const step = event.key === 'ArrowUp' ? -SNAP_MINUTES : event.key === 'ArrowDown' ? SNAP_MINUTES : 0
+  const dayStep = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0
+  if (!step && !dayStep) return
 
-  event.preventDefault();
-  if (event.shiftKey && step)
-    emit("change", calendarEvent, resizeEvent(calendarEvent, step));
-  else
-    emit(
-      "change",
-      calendarEvent,
-      moveEvent(calendarEvent, step + dayStep * MINUTES_PER_DAY, now)
-    );
+  event.preventDefault()
+  if (event.shiftKey && step) emit('change', calendarEvent, resizeEvent(calendarEvent, step))
+  else emit('change', calendarEvent, moveEvent(calendarEvent, step + dayStep * MINUTES_PER_DAY, now))
 }
 
 function getSegmentStyle(segment: DaySegment) {
@@ -224,30 +169,30 @@ function getSegmentStyle(segment: DaySegment) {
     left: `calc(${(segment.column / segment.columns) * 100}% + 2px)`,
     top: `${(segment.startMinute / MINUTES_PER_DAY) * GRID_HEIGHT}px`,
     width: `calc(${100 / segment.columns}% - 4px)`,
-  };
+  }
 }
 
-type DragState = CreateState | MoveState;
+type DragState = CreateState | MoveState
 
 interface CreateState {
-  column: HTMLElement;
-  currentMinute: number;
-  dayIndex: number;
-  moved: boolean;
-  originY: number;
-  startMinute: number;
-  type: "create";
+  column: HTMLElement
+  currentMinute: number
+  dayIndex: number
+  moved: boolean
+  originY: number
+  startMinute: number
+  type: 'create'
 }
 
 interface MoveState {
-  dayDelta: number;
-  dayIndex: number;
-  event: CalendarEvent;
-  minuteDelta: number;
-  moved: boolean;
-  originX: number;
-  originY: number;
-  type: "move" | "resize";
+  dayDelta: number
+  dayIndex: number
+  event: CalendarEvent
+  minuteDelta: number
+  moved: boolean
+  originX: number
+  originY: number
+  type: 'move' | 'resize'
 }
 </script>
 
@@ -255,9 +200,7 @@ interface MoveState {
   <div class="overflow-hidden rounded-md border">
     <div
       class="bg-muted/40 grid border-b"
-      :style="{
-        gridTemplateColumns: `3.5rem repeat(${days.length}, minmax(0, 1fr))`,
-      }"
+      :style="{ gridTemplateColumns: `3.5rem repeat(${days.length}, minmax(0, 1fr))` }"
     >
       <div aria-hidden="true" />
       <button
@@ -268,18 +211,16 @@ interface MoveState {
         :aria-label="`Show ${format(column.day, 'EEEE, MMMM d')} in day view`"
         @click="emit('selectDay', column.day)"
       >
-        <span class="text-muted-foreground text-xs uppercase">{{
-          format(column.day, "EEE")
-        }}</span>
+        <span class="text-muted-foreground text-xs uppercase">{{ format(column.day, 'EEE') }}</span>
         <span
           :class="
             cn(
               'mt-0.5 flex h-7 w-7 items-center justify-center rounded-full font-semibold',
-              column.isToday && 'bg-primary text-primary-foreground'
+              column.isToday && 'bg-primary text-primary-foreground',
             )
           "
         >
-          {{ format(column.day, "d") }}
+          {{ format(column.day, 'd') }}
         </span>
       </button>
     </div>
@@ -292,10 +233,7 @@ interface MoveState {
     >
       <div
         class="relative grid"
-        :style="{
-          gridTemplateColumns: `3.5rem repeat(${days.length}, minmax(0, 1fr))`,
-          height: `${GRID_HEIGHT}px`,
-        }"
+        :style="{ gridTemplateColumns: `3.5rem repeat(${days.length}, minmax(0, 1fr))`, height: `${GRID_HEIGHT}px` }"
       >
         <div class="relative" aria-hidden="true">
           <span
@@ -332,9 +270,7 @@ interface MoveState {
             role="button"
             :tabindex="0"
             :aria-label="getEventLabel(segment.event)"
-            :aria-describedby="
-              segment.event.isReadOnly ? undefined : 'calendar-shortcuts'
-            "
+            :aria-describedby="segment.event.isReadOnly ? undefined : 'calendar-shortcuts'"
             :class="
               cn(
                 'focus-visible:ring-ring absolute overflow-hidden rounded-md border-l-4 px-2 py-1 text-left text-xs shadow-xs outline-hidden select-none focus-visible:z-20 focus-visible:ring-2',
@@ -345,7 +281,7 @@ interface MoveState {
                 drag?.type !== 'create' &&
                   drag?.moved &&
                   drag.event.id === segment.event.id &&
-                  'z-30 opacity-80 shadow-lg'
+                  'z-30 opacity-80 shadow-lg',
               )
             "
             :style="{
@@ -363,16 +299,10 @@ interface MoveState {
             <p class="truncate">{{ segment.event.projectName }}</p>
             <p class="truncate">{{ formatEventTimes(segment.event) }}</p>
             <div
-              v-if="
-                !segment.event.isReadOnly &&
-                segment.event.end &&
-                !segment.continuesAfter
-              "
+              v-if="!segment.event.isReadOnly && segment.event.end && !segment.continuesAfter"
               class="absolute inset-x-0 bottom-0 h-2 cursor-ns-resize"
               aria-hidden="true"
-              @pointerdown="
-                startMove($event, segment.event, dayIndex, 'resize')
-              "
+              @pointerdown="startMove($event, segment.event, dayIndex, 'resize')"
             />
           </div>
           <div
@@ -381,9 +311,7 @@ interface MoveState {
             :style="{ top: `${(nowMinute / MINUTES_PER_DAY) * GRID_HEIGHT}px` }"
             aria-hidden="true"
           >
-            <span
-              class="bg-destructive absolute -top-1 -left-1 h-2.5 w-2.5 rounded-full"
-            />
+            <span class="bg-destructive absolute -top-1 -left-1 h-2.5 w-2.5 rounded-full" />
           </div>
         </div>
       </div>

@@ -6,12 +6,12 @@
   "bugs": {
     "url": "https://github.com/trueberryless/time-tracker/issues"
   },
+  "license": "MIT",
+  "author": "trueberryless <trueberryless@gmail.com> (https://felixs.dev)",
   "repository": {
     "type": "git",
     "url": "https://github.com/trueberryless/time-tracker.git"
   },
-  "license": "MIT",
-  "author": "trueberryless <trueberryless@gmail.com> (https://felixs.dev)",
   "type": "module",
   "scripts": {
     "build": "nuxt build",
@@ -58,7 +58,7 @@
     "@types/node": "^26.6.3",
     "happy-dom": "^20.14.5",
     "knip": "^6.38.0",
-    "oxfmt": "^0.68.0",
+    "oxfmt": "^0.71.0",
     "oxlint": "^1.83.0",
     "prettier": "3.9.9",
     "prettier-plugin-astro": "1.1.0",
@@ -68,8 +68,8 @@
     "vitest": "^5.0.2",
     "vue-tsc": "^3.3.11"
   },
-  "packageManager": "pnpm@11.28.0",
   "engines": {
     "node": ">=24.11.0"
-  }
+  },
+  "packageManager": "pnpm@11.28.0"
 }

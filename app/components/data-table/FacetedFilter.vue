@@ -1,46 +1,36 @@
 <script setup lang="ts">
-import { CheckIcon, CirclePlusIcon, Search } from "@lucide/vue";
-import {
-  ListboxContent,
-  ListboxFilter,
-  ListboxGroup,
-  ListboxItem,
-  ListboxRoot,
-} from "reka-ui";
+import { CheckIcon, CirclePlusIcon, Search } from '@lucide/vue'
+import { ListboxContent, ListboxFilter, ListboxGroup, ListboxItem, ListboxRoot } from 'reka-ui'
 
-const CLEAR_VALUE = "__clear__";
+const CLEAR_VALUE = '__clear__'
 
 const { facets, options, title } = defineProps<{
-  facets: Map<string, number>;
-  options: FilterOption[];
-  title: string;
-}>();
-const selected = defineModel<string[] | undefined>({ required: true });
-const search = ref("");
+  facets: Map<string, number>
+  options: FilterOption[]
+  title: string
+}>()
+const selected = defineModel<string[] | undefined>({ required: true })
+const search = ref('')
 
-const selectedValues = computed(() => new Set(selected.value ?? []));
+const selectedValues = computed(() => new Set(selected.value ?? []))
 const visibleOptions = computed(() =>
-  options.filter((option) =>
-    option.label.toLowerCase().includes(search.value.trim().toLowerCase())
-  )
-);
-const selectedOptions = computed(() =>
-  options.filter((option) => selectedValues.value.has(option.value))
-);
+  options.filter((option) => option.label.toLowerCase().includes(search.value.trim().toLowerCase())),
+)
+const selectedOptions = computed(() => options.filter((option) => selectedValues.value.has(option.value)))
 
 function toggleOption(value: string) {
   if (value === CLEAR_VALUE) {
-    selected.value = undefined;
-    return;
+    selected.value = undefined
+    return
   }
-  const next = new Set(selectedValues.value);
-  if (next.has(value)) next.delete(value);
-  else next.add(value);
-  selected.value = next.size ? [...next] : undefined;
+  const next = new Set(selectedValues.value)
+  if (next.has(value)) next.delete(value)
+  else next.add(value)
+  selected.value = next.size ? [...next] : undefined
 }
 
 const itemClass =
-  "data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50";
+  'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
 </script>
 
 <template>
@@ -51,19 +41,12 @@ const itemClass =
         {{ title }}
         <template v-if="selectedValues.size > 0">
           <Separator orientation="vertical" class="mx-2 h-4" />
-          <Badge
-            variant="secondary"
-            class="rounded-sm px-1 font-normal lg:hidden"
-          >
+          <Badge variant="secondary" class="rounded-sm px-1 font-normal lg:hidden">
             {{ selectedValues.size }}
             <span class="sr-only">selected</span>
           </Badge>
           <div class="hidden space-x-1 lg:flex">
-            <Badge
-              v-if="selectedValues.size > 2"
-              variant="secondary"
-              class="rounded-sm px-1 font-normal"
-            >
+            <Badge v-if="selectedValues.size > 2" variant="secondary" class="rounded-sm px-1 font-normal">
               {{ selectedValues.size }} selected
             </Badge>
             <template v-else>
@@ -99,13 +82,7 @@ const itemClass =
           />
         </div>
         <ListboxContent class="max-h-[300px] overflow-x-hidden overflow-y-auto">
-          <div
-            v-if="visibleOptions.length === 0"
-            class="py-6 text-center text-sm"
-            role="status"
-          >
-            No results found.
-          </div>
+          <div v-if="visibleOptions.length === 0" class="py-6 text-center text-sm" role="status">No results found.</div>
           <ListboxGroup class="text-foreground overflow-hidden p-1">
             <ListboxItem
               v-for="option in visibleOptions"
@@ -120,7 +97,7 @@ const itemClass =
                     'border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border',
                     selectedValues.has(option.value)
                       ? 'bg-primary text-primary-foreground'
-                      : 'opacity-50 [&_svg]:invisible'
+                      : 'opacity-50 [&_svg]:invisible',
                   )
                 "
                 aria-hidden="true"

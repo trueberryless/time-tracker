@@ -1,28 +1,21 @@
 <script setup lang="ts">
-const { dateRange, limit = 7 } = defineProps<{
-  dateRange: DateRange | undefined;
-  limit?: number;
-}>();
-const { user } = useTracker();
+const { dateRange, limit = 7 } = defineProps<{ dateRange: DateRange | undefined; limit?: number }>()
+const { user } = useTracker()
 
 const tasks = computed(() => {
-  if (!user.value) return [];
-  const range = dateRange?.from ? dateRange : undefined;
+  if (!user.value) return []
+  const range = dateRange?.from ? dateRange : undefined
 
   return user.value.projects
     .flatMap((project) => project.tasks.map((task) => ({ project, task })))
-    .filter(
-      ({ task }) =>
-        !range ||
-        task.sessions.some((session) => isSessionInDateRange(session, range))
-    )
+    .filter(({ task }) => !range || task.sessions.some((session) => isSessionInDateRange(session, range)))
     .sort(
       (a, b) =>
         getMostRecentSessionDateOfTask(b.task, range).getTime() -
-        getMostRecentSessionDateOfTask(a.task, range).getTime()
+        getMostRecentSessionDateOfTask(a.task, range).getTime(),
     )
-    .slice(0, limit);
-});
+    .slice(0, limit)
+})
 </script>
 
 <template>
@@ -38,28 +31,18 @@ const tasks = computed(() => {
       >
         <Avatar class="h-9 w-9">
           <AvatarFallback>
-            <component
-              :is="findOption(priorities, task.priority)?.icon"
-              class="h-4 w-4"
-              aria-hidden="true"
-            />
-            <span class="sr-only"
-              >{{ findOption(priorities, task.priority)?.label }} priority</span
-            >
+            <component :is="findOption(priorities, task.priority)?.icon" class="h-4 w-4" aria-hidden="true" />
+            <span class="sr-only">{{ findOption(priorities, task.priority)?.label }} priority</span>
           </AvatarFallback>
         </Avatar>
         <div class="ml-4 min-w-0 space-y-1">
-          <p class="truncate text-sm leading-none font-medium">
-            {{ project.name }} - {{ task.name }}
-          </p>
+          <p class="truncate text-sm leading-none font-medium">{{ project.name }} - {{ task.name }}</p>
           <div class="text-muted-foreground truncate text-sm">
             <OptionLabel :options="taskStatuses" :value="task.status" />
           </div>
         </div>
       </NuxtLink>
-      <div
-        class="relative z-10 ml-auto hidden ps-2 font-medium md:inline-block"
-      >
+      <div class="relative z-10 ml-auto hidden ps-2 font-medium md:inline-block">
         <StartStopButton :task="task" />
       </div>
     </li>
