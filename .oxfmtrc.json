@@ -11,6 +11,8 @@
     "lexicons/**",
     "public/data/**",
     "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
     ".github/**"
-  ]
+  ],
+  "sortPackageJson": false
 }

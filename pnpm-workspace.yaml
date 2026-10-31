@@ -1,6 +1,6 @@
 allowBuilds:
-  '@parcel/watcher': false
-  '@tailwindcss/oxide': false
+  "@parcel/watcher": false
+  "@tailwindcss/oxide": false
   canvas: false
   esbuild: false
   sharp: true
