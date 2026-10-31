@@ -1,6 +1,8 @@
 export function createTestUser(overrides: Partial<User> = {}): User {
+  const user = createUser('tester')
+
   return {
-    ...createUser('tester'),
+    ...user,
     id: 'user',
     projects: [
       {
@@ -33,6 +35,7 @@ export function createTestUser(overrides: Partial<User> = {}): User {
         ],
       },
     ],
+    settings: { ...user.settings, lastExported: new Date('2026-01-07T00:00:00Z') },
     visits: [{ id: 'visit-a', time: new Date('2026-01-05T12:00:00Z') }],
     ...overrides,
   }
