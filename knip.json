@@ -1,4 +1,5 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignoreDependencies": ["@vueuse/core", "vitest-environment-nuxt", "vue-tsc"]
+  "ignoreDependencies": ["@vueuse/core", "vue-tsc"],
+  "ignoreExportsUsedInFile": true
 }
