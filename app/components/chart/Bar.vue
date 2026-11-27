@@ -128,9 +128,7 @@ function trackPointer(event: PointerEvent) {
     <figcaption class="sr-only">
       <table>
         <caption>
-          {{
-            title
-          }}
+          {{ title }}
         </caption>
         <thead>
           <tr>
