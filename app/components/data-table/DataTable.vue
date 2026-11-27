@@ -70,9 +70,7 @@ function openRow(row: T, event: MouseEvent) {
         <div class="rounded-md border">
           <Table>
             <caption class="sr-only">
-              {{
-                title
-              }}
+              {{ title }}
             </caption>
             <TableHeader>
               <TableRow>
